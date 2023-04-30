@@ -61,10 +61,10 @@ class PollMgr {
  private:
   std::mutex m_;
   std::condition_variable changedone_c_;
-  std::thread th_;
+  std::unique_ptr<std::thread> th_;
 
   aio_callback *callbacks_[MAX_POLL_FDS];
-  aio_mgr *aio_;
+  std::unique_ptr<aio_mgr> aio_;
   bool pending_change_;
 };
 
