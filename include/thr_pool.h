@@ -14,13 +14,17 @@ namespace gxrpc {
 
 class ThreadPool {
  public:
+  struct Job {
+    Task func;
+    void *arg;
+  };
   ThreadPool(int sz, bool blocking = true);
   ~ThreadPool();
   template <class C, class A>
   bool addObjJob(C *o, void (C::*m)(A), A a);
   void waitDone();
 
-  bool takeJob(Job &job);
+  bool takeJob(Job *job);
 
  private:
   int nthreads_;
@@ -29,7 +33,7 @@ class ThreadPool {
 
   Fifo<Job> jobq_;
   std::vector<std::unique_ptr<std::thread>> threads_;
-  bool addJob(Job func);
+  bool addJob(Job *);
   bool addJob(void *(*f)(void *), void *a);
   void runInThread();
 };

@@ -2,4 +2,4 @@
 
 #include <functional>
 
-using Job = std::function<void()>;
+using Task = std::function<void(void*)>;

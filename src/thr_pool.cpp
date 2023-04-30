@@ -22,28 +22,21 @@ ThreadPool::~ThreadPool() {
   }
 }
 
-bool ThreadPool::addJob(Job job) {
-  return jobq_.enq(job, blockadd_);
+bool ThreadPool::addJob(Job *job) {
+  return jobq_.enq(*job, blockadd_);
 }
 
-// bool ThreadPool::addJob(void *(*f)(void *), void *a) {
-  // job_t j;
-  // j.f = f;
-  // j.a = a;
-  // return jobq_.enq(j, blockadd_);
-// }
-
-bool ThreadPool::takeJob(Job &job) {
-  jobq_.deq(&job);
+bool ThreadPool::takeJob(Job *job) {
+  jobq_.deq(job);
   return job != nullptr;
 }
 
 void ThreadPool::runInThread() {
   try {
     while(true) {
-      Job job;
+      Job *job;
       if (takeJob(job)) {
-        job();
+        job->func(job->arg);
       } else {
         break;
       }
