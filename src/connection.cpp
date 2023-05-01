@@ -300,7 +300,7 @@ tcpsconn::tcpsconn(chanmgr *m1, int port, int lossytest)
     VERIFY(0);
   }
 
-  int flags = fcntl(pipe_[0], F_GETFL, NULL);
+  int flags = fcntl(pipe_[0], F_GETFL, nullptr);
   flags |= O_NONBLOCK;
   fcntl(pipe_[0], F_SETFL, flags);
   th_ = method_thread(this, &tcpsconn::accept_conn);
@@ -357,7 +357,7 @@ void tcpsconn::accept_conn() {
     FD_SET(pipe_[0], &rfds);
     FD_SET(tcp_, &rfds);
 
-    int ret = select(max_fd + 1, &rfds, NULL, NULL, NULL);
+    int ret = select(max_fd + 1, &rfds, nullptr, nullptr, nullptr);
 
     if (ret < 0) {
       if (errno == EINTR) {
@@ -389,7 +389,7 @@ connection *connect_to_dst(const sockaddr_in &dst, chanmgr *mgr, int lossy) {
     jsl_log(JSL_DBG_1, "rpcc::connect_to_dst failed to %s:%d\n",
             inet_ntoa(dst.sin_addr), (int)ntohs(dst.sin_port));
     close(s);
-    return NULL;
+    return nullptr;
   }
   jsl_log(JSL_DBG_2, "connect_to_dst fd=%d to dst %s:%d\n", s,
           inet_ntoa(dst.sin_addr), (int)ntohs(dst.sin_port));
